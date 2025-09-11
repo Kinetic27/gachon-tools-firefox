@@ -12,13 +12,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "types": ["webextension-polyfill", "node"]
   },
   "include": ["*/**.ts", "*/**.tsx", "vite.config.ts", "src", "src/test/snapshot.test.ts"],
-  "exclude": ["node_modules", "dist"],
-  "types": ["chrome", "node"]
+  "exclude": ["node_modules", "dist"]
 }
