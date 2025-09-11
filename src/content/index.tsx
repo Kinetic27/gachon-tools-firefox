@@ -1,3 +1,4 @@
+import 'webextension-polyfill'
 import { createRoot } from 'react-dom/client'
 import cropperStyles from 'react-easy-crop/react-easy-crop.css?inline'
 

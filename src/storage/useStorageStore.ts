@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import { chromeStorageClient } from './chromeStorageClient'
+import { browserStorageClient } from './browserStorageClient'
 import packageJson from '../../package.json'
 import { filterActivities } from '@/content/components/task/filterActivities'
 import type { Activity, StorageData } from '@/types'
@@ -22,7 +22,7 @@ const initialStorageData: StorageData = {
     refreshInterval: 1000 * 60 * 20,
     trigger: {
       type: 'image',
-      image: chrome.runtime.getURL('/assets/Lee-Gil-ya.webp'),
+      image: browser.runtime.getURL('/assets/Lee-Gil-ya.webp'),
     },
     shortcut: isMac ? 'meta+/' : 'Ctrl+/',
   },
@@ -40,15 +40,15 @@ export const useStorageStore = create<StorageStore>((set, get) => ({
   isInitialized: false,
 
   initialize: async () => {
-    const storedData = await chromeStorageClient.getData()
+    const storedData = await browserStorageClient.getData()
     const mergedData = mergeData(initialStorageData, storedData)
-    await chromeStorageClient.setData(mergedData)
+    await browserStorageClient.setData(mergedData)
     set({ ...mergedData, isInitialized: true })
   },
 
   updateData: async <K extends keyof StorageData>(key: K, updater: (prev: StorageData[K]) => StorageData[K]) => {
     const updatedData = updater(get()[key])
-    await chromeStorageClient.updateDataByKey(key, () => updatedData)
+    await browserStorageClient.updateDataByKey(key, () => updatedData)
     set(state => ({ ...state, [key]: updatedData }))
   },
 
@@ -58,20 +58,23 @@ export const useStorageStore = create<StorageStore>((set, get) => ({
       .sort((a, b) => new Date(a.endAt).getTime() - new Date(b.endAt).getTime()),
 
   resetStore: async () => {
-    await chromeStorageClient.setData(initialStorageData)
+    await browserStorageClient.setData(initialStorageData)
     set({ ...initialStorageData, isInitialized: true })
   },
 }))
 
 useStorageStore.getState().initialize()
 
-chromeStorageClient.onStorageChanged(changes => {
-  const newState = Object.entries(changes).reduce((acc, [key, { newValue }]) => {
-    if (key in initialStorageData) {
-      acc[key as keyof StorageData] = newValue
-    }
-    return acc
-  }, {} as Partial<StorageData>)
+browserStorageClient.onStorageChanged((changes: { [key: string]: browser.storage.StorageChange }) => {
+  const newState = Object.entries(changes).reduce(
+    (acc, [key, { newValue }]) => {
+      if (key in initialStorageData) {
+        acc[key as keyof StorageData] = newValue as any
+      }
+      return acc
+    },
+    {} as Partial<StorageData>,
+  )
 
   if (Object.keys(newState).length > 0) {
     useStorageStore.setState(state => ({ ...state, ...newState }))

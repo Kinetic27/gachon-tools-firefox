@@ -1,12 +1,14 @@
-chrome.runtime.onInstalled.addListener(async () => {
-  for (const cs of chrome.runtime.getManifest().content_scripts ?? []) {
-    for (const tab of await chrome.tabs.query({ url: cs.matches ?? [] })) {
-      chrome.scripting.executeScript({
+import 'webextension-polyfill'
+
+browser.runtime.onInstalled.addListener(async () => {
+  for (const cs of browser.runtime.getManifest().content_scripts ?? []) {
+    for (const tab of await browser.tabs.query({ url: cs.matches ?? [] })) {
+      browser.scripting.executeScript({
         target: { tabId: tab.id ?? 0 },
         files: cs.js ?? [],
       })
-      cs.css?.forEach(css => {
-        chrome.scripting.insertCSS({
+      cs.css?.forEach((css: string) => {
+        browser.scripting.insertCSS({
           target: { tabId: tab.id ?? 0 },
           files: [css],
         })
@@ -15,21 +17,21 @@ chrome.runtime.onInstalled.addListener(async () => {
   }
 })
 
-chrome.runtime.onUpdateAvailable.addListener(() => {
-  chrome.runtime.reload()
+browser.runtime.onUpdateAvailable.addListener(() => {
+  browser.runtime.reload()
 })
 
-chrome.runtime.onConnect.addListener(port => {
+browser.runtime.onConnect.addListener((port: browser.runtime.Port) => {
   console.log('Connected .....', port)
 
   if (port.name === '@crx/client') {
-    port.onMessage.addListener(msg => {
+    port.onMessage.addListener((msg: any) => {
       console.log('message received', msg)
     })
   }
 })
 
-chrome.storage.onChanged.addListener((changes, areaName) => {
+browser.storage.onChanged.addListener((changes: { [key: string]: browser.storage.StorageChange }, areaName: string) => {
   if (areaName === 'local') {
     for (const key of Object.keys(changes)) {
       console.log(`storage.local.${key} changed`)
