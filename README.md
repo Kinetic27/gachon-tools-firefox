@@ -5,7 +5,7 @@
       <img src="https://github.com/user-attachments/assets/7bc1d9dd-3c1e-41fb-aa12-48a663a8e836" alt="화면" />
    </div>
    <br />
-   <img src="https://img.shields.io/chrome-web-store/v/ogldncimhepjdfadhjjhkchknloncnmg" alt="크롬 익스텐션 버전"/>
+   <img src="https://img.shields.io/amo/v/gachon-tools@kinetic27.com" alt="파이어폭스 익스텐션 버전"/>
    <img src="https://img.shields.io/github/license/kangju2000/gachon-extension" alt="라이선스"/>
 </div>
 
@@ -62,7 +62,7 @@ Gachon Tools를 통해 과제 관리가 더 쉬워지고, 학업에 더 집중�
 
 ## ℹ️ 개인정보 보호 및 보안
 
-모든 데이터는 크롬의 로컬 스토리지에만 저장되며, 외부 서버로 전송되지 않아요. 따라서 개인정보 유출의 위험 없이 안심하고 사용해주세요!
+모든 데이터는 브라우저의 로컬 스토리지에만 저장되며, 외부 서버로 전송되지 않아요. 따라서 개인정보 유출의 위험 없이 안심하고 사용해주세요!
 
 ## ❓ FAQ
 

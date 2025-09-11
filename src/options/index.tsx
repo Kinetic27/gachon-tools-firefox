@@ -1,3 +1,4 @@
+import 'webextension-polyfill'
 import { createRoot } from 'react-dom/client'
 
 import { Options } from './Options'

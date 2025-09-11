@@ -6,14 +6,17 @@ import { UNIVERSITY_LINK_LIST } from './src/constants/univ'
 const [major, minor, patch, label = '0'] = packageJson.version.replace(/[^\d.-]+/g, '').split(/[.-]/)
 
 const isDev = process.env.NODE_ENV === 'development'
+const isFirefox = process.env.BROWSER === 'firefox'
+
+const name = isDev
+  ? '[DEV] Gachon Tools - 과제 대시보드 · 사이버캠퍼스 어시스턴트'
+  : 'Gachon Tools - 과제 대시보드 · 사이버캠퍼스 어시스턴트'
 
 export default defineManifest(
   async () =>
     ({
       manifest_version: 3,
-      name: isDev
-        ? '[DEV] Gachon Tools - 과제 대시보드 · 사이버캠퍼스 어시스턴트'
-        : 'Gachon Tools - 과제 대시보드 · 사이버캠퍼스 어시스턴트',
+      name: isFirefox ? `[FF] ${name}` : name,
       description: packageJson.description,
       version: label === '0' ? `${major}.${minor}.${patch}` : `${major}.${minor}.${patch}.${label}`,
       version_name: packageJson.version,
@@ -31,10 +34,14 @@ export default defineManifest(
         '48': 'assets/logo48.png',
         '128': 'assets/logo128.png',
       },
-      background: {
-        service_worker: 'src/background/index.ts',
-        type: 'module',
-      },
+      background: isFirefox
+        ? {
+            scripts: ['src/background/index.ts'],
+          }
+        : {
+            service_worker: 'src/background/index.ts',
+            type: 'module',
+          },
       content_scripts: [
         {
           matches: UNIVERSITY_LINK_LIST.map(univ => `${univ}/*`),
@@ -56,5 +63,12 @@ export default defineManifest(
       ],
       host_permissions: UNIVERSITY_LINK_LIST.map(univ => `${univ}/*`),
       permissions: ['storage', 'unlimitedStorage', 'scripting', 'activeTab'],
+      browser_specific_settings: isFirefox
+        ? {
+            gecko: {
+              id: 'gachon-tools@kinetic27.com',
+            },
+          }
+        : undefined,
     }) as const,
 )
