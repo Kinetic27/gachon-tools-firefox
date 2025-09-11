@@ -29,3 +29,4 @@ coverage
 /playwright/.cache/
 
 **/vite.config.ts.timestamp-*
+.code-workspace
