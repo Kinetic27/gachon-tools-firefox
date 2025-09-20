@@ -1,4 +1,4 @@
-import { GachonLogoIcon, GithubIcon, FeedbackIcon, NotionIcon } from '@/components/Icons'
+import { GachonLogoIcon, GithubIcon } from '@/components/Icons'
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <div className="mt-10px flex gap-5px">
         <div className="tooltip" data-tip="깃허브">
           <a
-            href="https://www.github.com/kangju2000/gachon-extension"
+            href="https://github.com/Kinetic27/gachon-tools-firefox"
             target="_blank"
             rel="noreferrer"
             className="btn btn-ghost btn-circle btn-sm"
