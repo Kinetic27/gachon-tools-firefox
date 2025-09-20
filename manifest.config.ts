@@ -50,7 +50,7 @@ export default defineManifest(
             `${univ}/mod/ubfile/viewer.php*`,
             `${univ}/mod/vod/viewer.php*`,
           ]),
-          js: ['src/content/index.tsx'],
+          js: ['src/content/polyfill.ts', 'src/content/index.tsx'],
           run_at: 'document_start',
         },
       ],

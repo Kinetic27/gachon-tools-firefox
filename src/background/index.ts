@@ -1,27 +1,21 @@
-import 'webextension-polyfill'
+const extensionApi = globalThis.browser ?? chrome
+const runtime = extensionApi.runtime
+const tabs = extensionApi.tabs
+const scripting = extensionApi.scripting
+const storage = extensionApi.storage
 
-browser.runtime.onInstalled.addListener(async () => {
-  for (const cs of browser.runtime.getManifest().content_scripts ?? []) {
-    for (const tab of await browser.tabs.query({ url: cs.matches ?? [] })) {
-      browser.scripting.executeScript({
-        target: { tabId: tab.id ?? 0 },
-        files: cs.js ?? [],
-      })
-      cs.css?.forEach((css: string) => {
-        browser.scripting.insertCSS({
-          target: { tabId: tab.id ?? 0 },
-          files: [css],
-        })
-      })
-    }
+runtime.onInstalled.addListener(async details => {
+  if (details.reason === 'install') {
+    // set a badge so the browser action is enabled on install
+    runtime.setUninstallURL?.('https://github.com/Kinetic27/gachon-tools-firefox')
   }
 })
 
-browser.runtime.onUpdateAvailable.addListener(() => {
-  browser.runtime.reload()
+runtime.onUpdateAvailable.addListener(() => {
+  runtime.reload()
 })
 
-browser.runtime.onConnect.addListener((port: browser.runtime.Port) => {
+runtime.onConnect.addListener((port: Runtime.Port) => {
   console.log('Connected .....', port)
 
   if (port.name === '@crx/client') {
@@ -31,7 +25,7 @@ browser.runtime.onConnect.addListener((port: browser.runtime.Port) => {
   }
 })
 
-browser.storage.onChanged.addListener((changes: { [key: string]: browser.storage.StorageChange }, areaName: string) => {
+storage.onChanged.addListener((changes, areaName) => {
   if (areaName === 'local') {
     for (const key of Object.keys(changes)) {
       console.log(`storage.local.${key} changed`)
