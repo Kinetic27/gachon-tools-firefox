@@ -18,7 +18,7 @@ function App() {
             <GithubIcon className="h-20px w-20px" />
           </a>
         </div>
-        <div className="tooltip" data-tip="피드백">
+        {/* <div className="tooltip" data-tip="피드백">
           <a
             href="https://forms.gle/uM8M6ghS2ABme5s5A"
             target="_blank"
@@ -37,7 +37,7 @@ function App() {
           >
             <NotionIcon className="h-20px w-20px" />
           </a>
-        </div>
+        </div> */}
       </div>
     </div>
   )
